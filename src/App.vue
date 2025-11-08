@@ -93,6 +93,13 @@ const loadDataFromStorage = () => {
   }
 }
 
+const resetProgress = () => {
+  localStorage.removeItem(STORAGE_KEY)
+  wordsToGo.value = words.value.slice()
+  progress.value = 0
+  nextWords()
+}
+
 onMounted(() => {
   loadDataFromStorage()
 
@@ -107,11 +114,16 @@ onMounted(() => {
 
 <template>
   <div class="quiz-container">
-    <div class="progress-wrap" aria-hidden="false">
-      <div class="progress-track">
-        <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+    <div class="header">
+      <div class="progress-wrap" aria-hidden="false">
+        <div class="progress-track">
+          <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+        </div>
+        <div class="progress-label">{{ progress }}%</div>
       </div>
-      <div class="progress-label">{{ progress }}%</div>
+      <button class="reset-button" @click="resetProgress" title="Resetează progresul">
+        ↺
+      </button>
     </div>
 
     <h2>Alege varianta corectă</h2>
@@ -155,11 +167,34 @@ onMounted(() => {
   padding: 20px;
 }
 
-.progress-wrap {
+.header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
+}
+
+.reset-button {
+  position: static;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity 150ms;
+}
+
+.reset-button:hover {
+  opacity: 1;
+}
+
+.progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .progress-track {
